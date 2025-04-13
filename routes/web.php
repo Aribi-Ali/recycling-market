@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
@@ -15,7 +16,7 @@ Route::group(
     ],
     function () { //...
 
-
+        Route::resource('posts', PostController::class);
         Route::get('/', function () {
             return view('home');
         })->name("home");
