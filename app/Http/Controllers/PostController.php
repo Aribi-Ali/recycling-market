@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Laravel\Facades\Image;
+
 
 class PostController extends Controller
 {
@@ -40,10 +43,28 @@ class PostController extends Controller
         $post->title = $validated['title'];
         $post->content = $validated['content'];
 
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('featured_images', 'public');
-            $post->featured_image = $imagePath;
+         if ($request->hasFile('image')) {
+             $imagePath = $request->file('image')->store('featured_images', 'public');
+             $post->featured_image = $imagePath;
         }
+
+
+        // if ($request->hasFile('image')) {
+        //     $image = $request->file('image');
+        //     $filename = time() . '.' . $image->getClientOriginalExtension();
+
+        //     // Resize image to 600x800 (you can change this)
+        //     $resizedImage = Image::make($image)->resize(600, 800, function ($constraint) {
+        //         $constraint->aspectRatio();
+        //         $constraint->upsize();
+        //     })->encode();
+
+        //     // Store it
+        //     Storage::put("public/posts/$filename", $resizedImage);
+
+        //     $imagePath = "posts/$filename";
+        // }
+
 
         $post->save();
 

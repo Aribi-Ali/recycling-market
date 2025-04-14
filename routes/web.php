@@ -20,7 +20,8 @@ Route::group(
         Route::resource('posts', PostController::class);
         Route::post('/ckeditor/upload', [CKEditorController::class, 'upload'])->name('ckeditor.upload');
         Route::get('/', function () {
-            return view('home');
+            $posts = \App\Models\Post::latest()->paginate(10);
+            return view('home', compact('posts'));
         })->name("home");
 
         Route::get('/dashboard', function () {

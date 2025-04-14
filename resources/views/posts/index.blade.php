@@ -12,13 +12,13 @@
 
         <div class="grid gap-4">
             @foreach ($posts as $post)
-                <div class="p-4 border rounded shadow hover:bg-gray-50">
+                <div class="p-4 border rounded shadow hover:bg-gray-50 ">
                     @if ($post->featured_image)
                         <img src="{{ asset('storage/' . $post->featured_image) }}" alt=""
-                            class="object-cover w-full max-w-md mb-2 rounded shadow" height="100">
+                            class="object-cover w-64 h-64 max-w-md mb-2 rounded shadow">
                     @endif
                     <h2 class="text-xl font-semibold">{{ $post->title }}</h2>
-                    <p class="text-gray-600">{{ Str::limit(strip_tags($post->content), 150) }}</p>
+                    <p class="text-gray-600">{{ Illuminate\Support\Str::limit(strip_tags($post->content), 150) }}</p>
                     <div class="flex mt-2 space-x-2">
                         <a href="{{ route('posts.show', $post) }}" class="text-blue-600">View</a>
                         <a href="{{ route('posts.edit', $post) }}" class="text-yellow-600">Edit</a>
