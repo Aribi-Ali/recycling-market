@@ -15,8 +15,18 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('slug')->unique();
-            $table->text('content');
-            $table->string('featured_image')->nullable();
+            $table->text('description');
+            $table->boolean('is_free');
+            $table->integer('price');
+            $table->string("condition");
+            $table->string("status");
+
+            $table->unsignedBigInteger('category_id');
+            $table->foreign('category_id')->references('id')->on('categories');
+
+            $table->unsignedBigInteger('seller_id');
+            $table->foreign('seller_id')->references('id')->on('users')->onDelete('cascade');
+
             $table->timestamp('published_at')->nullable();
             $table->timestamps();
         });
