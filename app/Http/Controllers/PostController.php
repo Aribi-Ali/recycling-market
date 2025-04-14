@@ -18,18 +18,6 @@ class PostController extends Controller
         return view('posts.create');
     }
 
-    public function store(Request $request)
-    {
-        $data = $request->validate([
-            'title' => 'required',
-            'content' => 'required',
-        ]);
-
-        Post::create($data);
-
-        return redirect()->route('posts.index')->with('success', 'Post created.');
-    }
-
     public function show(Post $post)
     {
         return view('posts.show', compact('post'));
@@ -40,12 +28,39 @@ class PostController extends Controller
         return view('posts.edit', compact('post'));
     }
 
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'required|max:255',
+            'content' => 'required',
+            'featured_image' => 'nullable|image|max:2048', // 2MB max
+        ]);
+
+        $post = new Post();
+        $post->title = $validated['title'];
+        $post->content = $validated['content'];
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('featured_images', 'public');
+            $post->featured_image = $imagePath;
+        }
+
+        $post->save();
+
+        return redirect()->route('posts.index')->with('success', 'Post created successfully!');
+    }
+
     public function update(Request $request, Post $post)
     {
         $data = $request->validate([
             'title' => 'required',
             'content' => 'required',
+            'featured_image' => 'nullable|image|max:2048',
         ]);
+
+        if ($request->hasFile('image')) {
+            $data['featured_image'] = $request->file('image')->store('posts', 'public');
+        }
 
         $post->update($data);
 

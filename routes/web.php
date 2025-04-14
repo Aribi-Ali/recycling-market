@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CKEditorController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
@@ -17,6 +18,7 @@ Route::group(
     function () { //...
 
         Route::resource('posts', PostController::class);
+        Route::post('/ckeditor/upload', [CKEditorController::class, 'upload'])->name('ckeditor.upload');
         Route::get('/', function () {
             return view('home');
         })->name("home");

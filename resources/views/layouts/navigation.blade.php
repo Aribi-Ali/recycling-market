@@ -1,4 +1,5 @@
-<nav x-data="{ open: false }" class="fixed top-0 left-0 w-screen bg-blue-600 border-b border-blue-700 dark:bg-gray-800 dark:border-gray-700">
+<nav x-data="{ open: false }" class="w-screen border-b border-blue-700 shadow-lg bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 dark:border-gray-700">
+    <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
     <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
             <div class="flex items-center">
@@ -11,9 +12,7 @@
                 <div class="hidden sm:flex sm:space-x-6 sm:ms-10">
 
 
-                    <x-nav-link :href="route('map')" :active="request()->routeIs('map')" class="text-white hover:text-blue-200">
-                        {{ __('Map') }}
-                    </x-nav-link>
+
 
                     @auth
                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-white hover:text-blue-200">
