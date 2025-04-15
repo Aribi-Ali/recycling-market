@@ -56,8 +56,8 @@ class User extends Authenticatable
     }
 
     // Relationships
-    public function posts(){
-        return $this->hasMany(Post::class, "seller_id");
+    public function products(){
+        return $this->hasMany(Product::class, "seller_id");
     }
 
     public function orders(){

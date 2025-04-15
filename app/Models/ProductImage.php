@@ -4,15 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PostImage extends Model
+class ProductImage extends Model
 {
     protected $fillable = [
-        'post_id',
+        'product_id',
         'image_url',
     ];
 
     // Relationships
-    public function post(){
-        return $this->belongsTo(Post::class);
+    public function product(){
+        return $this->belongsTo(Product::class);
     }
 }

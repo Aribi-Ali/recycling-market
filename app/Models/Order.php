@@ -9,7 +9,7 @@ class Order extends Model
     protected $fillable = [
         'buyer_id',
         'seller_id',
-        'post_id',
+        'product_id',
         'address_id',
         'status',
     ];
@@ -23,8 +23,8 @@ class Order extends Model
         return $this->belongsTo(User::class, 'seller_id');
     }
 
-    public function post(){
-        return $this->belongsTo(Post::class, );
+    public function product(){
+        return $this->belongsTo(Product::class);
     }
 
     public function address(){

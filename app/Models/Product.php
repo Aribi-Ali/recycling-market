@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Illuminate\Tests\Integration\Database\EloquentHasManyThroughTest\Category;
 
-class Post extends Model
+class Product extends Model
 {
     protected $fillable =
         [
@@ -26,8 +26,8 @@ class Post extends Model
     {
         parent::boot();
 
-        static::creating(function ($post) {
-            $post->slug = Str::slug($post->title);
+        static::creating(function ($product) {
+            $product->slug = Str::slug($product->title);
         });
     }
 
@@ -37,7 +37,7 @@ class Post extends Model
     }
 
     public function images(){
-        return $this->hasMany(PostImage::class);
+        return $this->hasMany(ProductImage::class);
     }
 
     public function category(){
