@@ -23,7 +23,8 @@ return new class extends Migration
             $table->string('password');
 
             $table->unsignedBigInteger('address_id')->nullable();
-            $table->foreign("address_id")->references('id')->on('addresses')->nullOnDelete();
+            $table->foreign("address_id")->references('id')->on('addresses');
+
             $table->timestamps();
             $table->rememberToken();
         });

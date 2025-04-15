@@ -8,6 +8,7 @@ use Illuminate\Auth\Access\Gate;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Tests\Integration\Queue\Order;
 
 class User extends Authenticatable
 {
@@ -24,11 +25,9 @@ class User extends Authenticatable
         'first_name',
         'last_name',
         'email',
-        'city_id',
-        'email',
+        'address_id',
         'password',
         'phone_number',
-        'address',
         'type','status'
 
     ];
@@ -56,16 +55,25 @@ class User extends Authenticatable
         ];
     }
 
-    public function city()
-    {
-        return $this->belongsTo(City::class);
+    // Relationships
+    public function posts(){
+        return $this->hasMany(Post::class, "seller_id");
     }
 
-    public function getFullNameAttribute()
-    {
-        return "{$this->first_name} {$this->last_name}";
+    public function orders(){
+        return $this->hasMany(Order::class, "buyer_id");
     }
 
+    public function soldOrders(){
+        return $this->hasMany(Order::class, "seller_id");
+    }
 
-  
+    public function addresses(){
+        return $this->hasMany(Address::class);
+    }
+
+    public function notifications(){
+        return $this->hasMany(Notification::class);
+    }
+
 }

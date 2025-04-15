@@ -19,8 +19,8 @@ return new class extends Migration
             $table->unsignedBigInteger('seller_id');
             $table->foreign("seller_id")->references('id')->on('users')->nullOnDelete();
 
-            $table->unsignedBigInteger('product_id');
-            $table->foreign("product_id")->references('id')->on('products')->nullOnDelete();
+            $table->unsignedBigInteger('post_id');
+            $table->foreign("post_id")->references('id')->on('posts')->nullOnDelete();
 
             $table->unsignedBigInteger('address_id');
             $table->foreign("address_id")->references('id')->on('addresses')->nullOnDelete();
