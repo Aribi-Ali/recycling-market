@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CKEditorController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\ProductApprovalController;
@@ -47,11 +48,19 @@ Route::group(
                 Route::delete("/products/{productId}", [ProductController::class, "delete"])->name("seller.products.delete");
             });
 
+            // Category
+            Route::get("/categories", [CategoryController::class, 'index'])->name('admin.categories.index');
+
             // Admin
             Route::middleware("role:admin")->prefix("admin")->group(function () {
+                // Product
                 Route::get('/products/pending', [ProductApprovalController::class, 'index'])->name('admin.products.pending');
                 Route::put('/products/{id}/approve', [ProductApprovalController::class, 'approve'])->name('admin.products.approve');
                 Route::put('/products/{id}/reject', [ProductApprovalController::class, 'reject'])->name('admin.products.reject');
+
+                // Category
+                Route::post("/categories/create", [CategoryController::class, "store"])->name("admin.categories.store");
+                Route::delete("/categories/{categoryId}", [CategoryController::class, "destroy"])->name("admin.categories.destroy");
             });
         });
         require __DIR__ . '/auth.php';
