@@ -18,8 +18,8 @@ return new class extends Migration
             $table->text('description');
             $table->boolean('is_free');
             $table->integer('price');
-            $table->string("condition");
-            $table->string("status");
+            $table->enum("condition", ["new", "used"]);
+            $table->enum("status", ["approved", "pending", "rejected"])->default("pending");
 
             $table->unsignedBigInteger('category_id');
             $table->foreign('category_id')->references('id')->on('categories');

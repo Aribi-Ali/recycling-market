@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CKEditorController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\ProductApprovalController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -39,11 +40,18 @@ Route::group(
             Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
             // Products
-            Route::middleware("role:seller")->prefix("dashboard")->group(function () {
-                Route::get("/products", [ProductController::class, "sellerProducts"])->name("dashboard.products.index");
-                Route::post("/products", [ProductController::class, "store"])->name("dashboard.products.store");
-                Route::put("/products/{productId}", [ProductController::class, "update"])->name("dashboard.products.update");
-                Route::delete("/products/{productId}", [ProductController::class, "delete"])->name("dashboard.products.delete");
+            Route::middleware("role:seller")->prefix("seller")->group(function () {
+                Route::get("/products", [ProductController::class, "sellerProducts"])->name("seller.products.index");
+                Route::post("/products", [ProductController::class, "store"])->name("seller.products.store");
+                Route::put("/products/{productId}", [ProductController::class, "update"])->name("seller.products.update");
+                Route::delete("/products/{productId}", [ProductController::class, "delete"])->name("seller.products.delete");
+            });
+
+            // Admin
+            Route::middleware("role:admin")->prefix("admin")->group(function () {
+                Route::get('/products/pending', [ProductApprovalController::class, 'index'])->name('admin.products.pending');
+                Route::put('/products/{id}/approve', [ProductApprovalController::class, 'approve'])->name('admin.products.approve');
+                Route::put('/products/{id}/reject', [ProductApprovalController::class, 'reject'])->name('admin.products.reject');
             });
         });
         require __DIR__ . '/auth.php';
