@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AddressController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CKEditorController;
 use App\Http\Controllers\LocationController;
@@ -39,6 +40,12 @@ Route::group(
             Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
             Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
             Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+            // Address
+            Route::get("/addresses", [AddressController::class, "index"])->name("addresses.index");
+            Route::post("/addresses/create", [AddressController::class, "store"])->name("addresses.store");
+            Route::delete("/addresses/{addressId}", [AddressController::class, "destroy"])->name("addresses.destroy");
+            Route::put('/addresses/{id}/default', [AddressController::class, 'setDefault'])->name('addresses.setDefault');
 
             // Products
             Route::middleware("role:seller")->prefix("seller")->group(function () {
