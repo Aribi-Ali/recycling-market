@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     protected $fillable = [
-        'buyer_id',
-        'seller_id',
+        'user_id',
         'product_id',
         'address_id',
         'status',
@@ -16,11 +15,7 @@ class Order extends Model
 
     // Relationships
     public function buyer(){
-        return $this->belongsTo(User::class, 'buyer_id');
-    }
-
-    public function seller(){
-        return $this->belongsTo(User::class, 'seller_id');
+        return $this->belongsTo(User::class);
     }
 
     public function product(){

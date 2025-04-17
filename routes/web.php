@@ -4,6 +4,7 @@ use App\Http\Controllers\AddressController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CKEditorController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductApprovalController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
@@ -58,6 +59,10 @@ Route::group(
             // Category
             Route::get("/categories", [CategoryController::class, 'index'])->name('admin.categories.index');
 
+            // Order
+            Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+            Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+
             // Admin
             Route::middleware("role:admin")->prefix("admin")->group(function () {
                 // Product
@@ -68,6 +73,11 @@ Route::group(
                 // Category
                 Route::post("/categories/create", [CategoryController::class, "store"])->name("admin.categories.store");
                 Route::delete("/categories/{categoryId}", [CategoryController::class, "destroy"])->name("admin.categories.destroy");
+
+                // Order
+                Route::get('/orders', [OrderController::class, 'adminIndex'])->name('admin.orders.index');
+                Route::post('/orders/{id}/status', [OrderController::class, 'changeStatus'])->name('admin.orders.status');
+                Route::delete('/orders/{id}', [OrderController::class, 'destroy'])->name('admin.orders.destroy');
             });
         });
         require __DIR__ . '/auth.php';
