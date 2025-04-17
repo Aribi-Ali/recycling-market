@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
+use App\Notifications\ProductApprovedNotification;
 
 class ProductApprovalService{
     public function getPendingProducts(){
@@ -15,6 +16,10 @@ class ProductApprovalService{
         $product = Product::findOrFail($productId);
         $product->status = 'approved';
         $product->save();
+
+        // Send notification
+        $user = $product->user;
+        $user->notify(new ProductApprovedNotification($product));
     }
 
     public function rejectProduct($productId){

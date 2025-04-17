@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
+use App\Notifications\OrderConfirmedNotification;
 use Illuminate\Support\Facades\Auth;
 
 class OrderService{
@@ -28,8 +29,19 @@ class OrderService{
 
     public function updateStatus($orderId, $status){
         $order = Order::findOrFail($orderId);
-        $order->status = $status;
+        $updatedStatus = $order->status = $status;
         $order->save();
+
+        // Send notification
+        $message = match ($updatedStatus) {
+            "pending" => "Your order #{$order->id} is pending approval.",
+            'confirmed' => "Your order #{$order->id} has been confirmed.",
+            'shipped'   => "Your order #{$order->id} is on the way!",
+            'delivered' => "Your order #{$order->id} has been delivered.",
+            'cancelled' => "Your order #{$order->id} has been cancelled.",
+        };
+        $user = $order->user;
+        $user->notify(new OrderConfirmedNotification($order, $message));
     }
 
     public function delete($orderId){

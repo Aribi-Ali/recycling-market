@@ -14,13 +14,15 @@ class OrderConfirmedNotification extends Notification
     use Queueable;
 
     protected $order;
+    protected $customMessage;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct($order)
+    public function __construct($order, $customMessage)
     {
         $this->order = $order;
+        $this->customMessage = $customMessage;
     }
 
     /**
@@ -39,7 +41,7 @@ class OrderConfirmedNotification extends Notification
     public function toDatabase(object $notifiable): DatabaseMessage
     {
         return new DatabaseMessage([
-            'message' => "Your order #{$this->order->id} has been confirmed.",
+            'message' => $this->customMessage,
             'order_id' => $this->order->id,
         ]);
     }
@@ -47,7 +49,7 @@ class OrderConfirmedNotification extends Notification
     public function toBroadcast($notifiable): BroadcastMessage
     {
         return new BroadcastMessage([
-            'message' => "Your order #{$this->order->id} has been confirmed.",
+            'message' => $this->customMessage,
             'order_id' => $this->order->id,
         ]);
     }

@@ -22,7 +22,7 @@ return new class extends Migration
             $table->unsignedBigInteger('address_id');
             $table->foreign("address_id")->references('id')->on('addresses')->nullOnDelete();
 
-            $table->enum('status', ["pending", "reserved", "delivered", "cancelled"])->default('pending');
+            $table->enum('status', ["pending", "confirmed", "delivered", "shipped", "cancelled"])->default('pending');
             $table->timestamps();
         });
     }
