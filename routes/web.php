@@ -52,30 +52,30 @@ Route::group(
             Route::put('/addresses/{id}/default', [AddressController::class, 'setDefault'])->name('addresses.setDefault');
 
             // Products
-            Route::middleware("role:seller")->prefix("seller")->group(function () {
-                Route::get("/products", [ProductController::class, "sellerProducts"])->name("seller.products.index");
-                Route::post("/products", [ProductController::class, "store"])->name("seller.products.store");
-                Route::put("/products/{productId}", [ProductController::class, "update"])->name("seller.products.update");
-                Route::delete("/products/{productId}", [ProductController::class, "delete"])->name("seller.products.delete");
-            });
+            Route::get("/{userId}/products", [ProductController::class, "sellerProducts"])->name("seller.products.index");
+            Route::post("/products", [ProductController::class, "store"])->name("seller.products.store");
+            Route::put("/products/{productId}", [ProductController::class, "update"])->name("seller.products.update");
+            Route::delete("/products/{productId}", [ProductController::class, "delete"])->name("seller.products.delete");
 
             // Category
-            Route::get("/categories", [CategoryController::class, 'index'])->name('admin.categories.index');
+            //Route::get("/categories", [CategoryController::class, 'index'])->name('admin.categories.index');
 
             // Order
             Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
             Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
 
             // Admin
-            Route::middleware("role:admin")->prefix("admin")->group(function () {
+            Route::prefix("admin")->group(function () {
                 // Product
+                Route::get("/products/approved", [ProductController::class, "adminIndex"])->name("admin.products.approved");
                 Route::get('/products/pending', [ProductApprovalController::class, 'index'])->name('admin.products.pending');
                 Route::put('/products/{id}/approve', [ProductApprovalController::class, 'approve'])->name('admin.products.approve');
                 Route::put('/products/{id}/reject', [ProductApprovalController::class, 'reject'])->name('admin.products.reject');
 
                 // Category
+                Route::get("/categories", [CategoryController::class, 'index'])->name('admin.categories.index');
                 Route::post("/categories/create", [CategoryController::class, "store"])->name("admin.categories.store");
-                Route::delete("/categories/{categoryId}", [CategoryController::class, "destroy"])->name("admin.categories.destroy");
+                Route::delete('/categories/{categoryId}', [CategoryController::class, "destroy"])->name("admin.categories.destroy");
 
                 // Order
                 Route::get('/orders', [OrderController::class, 'adminIndex'])->name('admin.orders.index');

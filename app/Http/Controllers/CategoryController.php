@@ -17,7 +17,7 @@ class CategoryController extends Controller{
 
     public function index(){
         $categories = $this->categoryService->getAll();
-        return view('category.index', compact('categories'));
+        return view('categories.index', compact('categories'));
     }
 
     /*public function show(Category $categoryId){
@@ -29,7 +29,9 @@ class CategoryController extends Controller{
         $request->validate([
             "name" => "required|string|max:100|unique:categories,name",
         ]);
-        $this->categoryService->create($request);
+        $this->categoryService->create([
+            "name" => $request->get("name"),
+        ]);
         return redirect()->back()->with('success', 'Category created!');
     }
 
@@ -41,8 +43,14 @@ class CategoryController extends Controller{
         return redirect()->back()->with('success', 'Category updated!');
     }*/
 
-    public function destroy(Category $categoryId){
-        $this->categoryService->delete($categoryId);
-        return redirect()->back()->with('success', 'Category deleted!');
+    public function destroy($categoryId){
+        try {
+            $this->categoryService->delete($categoryId);
+            return redirect()->back()
+                ->with('success', 'Category deleted successfully');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Failed to delete category');
+        }
     }
 }

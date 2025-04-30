@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('first_name');
             $table->string("last_name");
             $table->string("phone_number")->unique();
-            $table->enum("type", ["admin", "client", "seller"]);
+            $table->enum("role", ["admin", "client"]);
             $table->enum("status", ["active", "suspended"]);
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();

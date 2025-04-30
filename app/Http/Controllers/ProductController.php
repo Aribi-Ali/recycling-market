@@ -22,6 +22,11 @@ class ProductController extends Controller
         return view('products.index', compact('products'));
     }
 
+    public function adminIndex(){
+        $products = $this->productService->getPublicProducts();
+        return view('products.approved', compact('products'));
+    }
+
     public function search(Request $request){
         $filters = $request->only([
             'name',
