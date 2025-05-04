@@ -20,41 +20,26 @@
     <div class="max-h-screen min-h-screen bg-white dark:bg-gray-900">
         @include('layouts.navigation')
 
-        <!-- Page Heading -->
-        @isset($header)
-            <header class="bg-white shadow dark:bg-gray-800">
-                <div class="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    {{ $header }}
-                </div>
-            </header>
-        @endisset
-
         <!-- Page Content -->
-        <main class="flex">
-            <div class="h-full bg-white border-r border-gray-200">
-                <div class="flex items-center justify-center h-16 border-b border-gray-200">
-                    <h1 class="text-xl font-bold text-indigo-600">🛍️ Clothing Admin</h1>
+        <main class="flex h-screen bg-gray-50">
+            <div class="hidden md:flex md:flex-shrink-0">
+                <div class="flex flex-col w-64">
+                    @include('components.sidebar')
                 </div>
-                <nav class="mt-6">
-                    <ul>
-                        <li class="mb-2">
-                            <a href="{{route('dashboard')}}" class="flex items-center w-full px-6 py-3 transition-colors duration-200 {{ request()->routeIs('dashboard') ? 'bg-indigo-50 text-indigo-600 border-r-4 border-indigo-600' : 'text-gray-600 hover:bg-gray-50' }}">
-                                {{ __('Dashboard') }}
-                            </a>
-                            <a href="{{route('admin.products.approved')}}" class="flex items-center w-full px-6 py-3 transition-colors duration-200 {{ request()->routeIs('admin.products.approved') ? 'bg-indigo-50 text-indigo-600 border-r-4 border-indigo-600' : 'text-gray-600 hover:bg-gray-50' }}">
-                                {{ __('Approved Products') }}
-                            </a>
-                            <a href="{{route('admin.products.pending')}}" class="flex items-center w-full px-6 py-3 transition-colors duration-200 {{ request()->routeIs('admin.products.pending') ? 'bg-indigo-50 text-indigo-600 border-r-4 border-indigo-600' : 'text-gray-600 hover:bg-gray-50' }}">
-                                {{ __('Pending Products') }}
-                            </a>
-                            <a href="{{route('admin.categories.index')}}" class="flex items-center w-full px-6 py-3 transition-colors duration-200 {{ request()->routeIs('admin.categories.index') ? 'bg-indigo-50 text-indigo-600 border-r-4 border-indigo-600' : 'text-gray-600 hover:bg-gray-50' }}">
-                                {{ __('Categories') }}
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
             </div>
-            {{ $slot }}
+            <div class="flex flex-col flex-1 overflow-hidden">
+                <!-- Page Heading -->
+                @isset($header)
+                    <header class="bg-white shadow dark:bg-gray-800">
+                        <div class="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
+                            {{ $header }}
+                        </div>
+                    </header>
+                @endisset
+                <main class="flex-1 relative overflow-y-auto focus:outline-none p-4 md:p-6">
+                    {{ $slot }}
+                </main>
+            </div>
         </main>
     </div>
 </body>

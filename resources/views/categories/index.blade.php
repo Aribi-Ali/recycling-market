@@ -10,7 +10,7 @@
     @endif
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Approved Products') }}
+            {{ __('Categories') }}
         </h2>
     </x-slot>
         <div class="flex-1 relative overflow-y-auto focus:outline-none p-4 md:p-6">
