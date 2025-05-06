@@ -15,16 +15,16 @@ return new class extends Migration
             $table->id();
             $table->string('first_name');
             $table->string("last_name");
-            $table->string("phone_number");
-            $table->enum("type", ["admin", "clinet"]);
+            $table->string("phone_number")->unique();
+            $table->enum("role", ["admin", "client"]);
             $table->enum("status", ["active", "suspended"]);
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->unsignedBigInteger('city_id')->nullable();
-            $table->foreign('city_id')->references('id')->on('cities')->nullOnDelete();
 
-            $table->string("address")->nullable();
+            $table->unsignedBigInteger('address_id')->nullable();
+            $table->foreign("address_id")->references('id')->on('addresses');
+
             $table->timestamps();
             $table->rememberToken();
         });

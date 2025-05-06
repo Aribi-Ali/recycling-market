@@ -87,11 +87,13 @@
                                 <x-slot name="trigger">
                                     <button
                                         class="inline-flex items-center px-3 py-2 text-white bg-blue-700 rounded-md hover:bg-blue-800">
-                                        <div>{{ Auth::user()->name }}</div>
+                                        <div>
+                                            {{ Illuminate\Support\Facades\Auth::user()->last_name . ' ' . Illuminate\Support\Facades\Auth::user()->first_name }}
+                                        </div>
                                         <svg class="w-4 h-4 ml-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                                             fill="currentColor">
                                             <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414
-                                            1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                                         </svg>
                                     </button>
                                 </x-slot>
@@ -142,8 +144,10 @@
             @auth
                 <div class="pt-4 pb-1 border-t border-blue-200 dark:border-gray-600">
                     <div class="px-4">
-                        <div class="text-base font-medium text-white">{{ Auth::user()->name }}</div>
-                        <div class="text-sm font-medium text-blue-200">{{ Auth::user()->email }}</div>
+                        <div class="text-base font-medium text-white">{{ Illuminate\Support\Facades\Auth::user()->name }}
+                        </div>
+                        <div class="text-sm font-medium text-blue-200">{{ Illuminate\Support\Facades\Auth::user()->email }}
+                        </div>
                     </div>
 
                     <div class="mt-3 space-y-1">
@@ -160,7 +164,7 @@
                         </form>
                     </div>
                 </div>
-                  @endauth
+            @endauth
         </div>
 </nav>
 

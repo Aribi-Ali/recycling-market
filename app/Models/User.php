@@ -4,10 +4,13 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Models\Order as ModelsOrder;
 use Illuminate\Auth\Access\Gate;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+// use Illuminate\Tests\Integration\Queue\Order;
+use App\Models\Order;
 
 class User extends Authenticatable
 {
@@ -24,13 +27,11 @@ class User extends Authenticatable
         'first_name',
         'last_name',
         'email',
-        'city_id',
-        'email',
+        'address_id',
         'password',
         'phone_number',
-        'address',
-        'type','status'
-
+        'role',
+        'status'
     ];
 
     /**
@@ -56,16 +57,24 @@ class User extends Authenticatable
         ];
     }
 
-    public function city()
+    // Relationships
+    public function products()
     {
-        return $this->belongsTo(City::class);
+        return $this->hasMany(Product::class, "seller_id");
     }
 
-    public function getFullNameAttribute()
+    public function orders()
     {
-        return "{$this->first_name} {$this->last_name}";
+        return $this->hasMany(Order::class, "user_id");
     }
 
+    public function soldOrders()
+    {
+        return $this->hasMany(Order::class, "seller_id");
+    }
 
-  
+    public function addresses()
+    {
+        return $this->hasMany(Address::class);
+    }
 }

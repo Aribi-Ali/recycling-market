@@ -1,12 +1,12 @@
 <x-guest-layout>
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
-        <h2 class="mt-6 text-center text-2xl font-extrabold text-gray-900 dark:text-gray-100">
+        <h2 class="mt-6 text-2xl font-extrabold text-center text-gray-900 dark:text-gray-100">
             {{ __('Create your account') }}
         </h2>
     </div>
 
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div class="bg-white dark:bg-gray-800 py-8 px-4 shadow sm:rounded-lg sm:px-10">
+        <div class="px-4 py-8 bg-white shadow dark:bg-gray-800 sm:rounded-lg sm:px-10">
             <form method="POST" action="{{ route('register') }}" class="space-y-6">
                 @csrf
 
@@ -15,7 +15,7 @@
                     <x-input-label for="first_name" :value="__('First Name')" class="text-sm font-medium" />
                     <div class="mt-1">
                         <x-text-input id="first_name"
-                            class="block w-full rounded-md shadow-sm border-gray-300 dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500"
+                            class="block w-full border-gray-300 rounded-md shadow-sm dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500"
                             type="text" name="first_name" :value="old('first_name')" required autofocus />
                     </div>
                     <x-input-error :messages="$errors->get('first_name')" class="mt-2" />
@@ -26,7 +26,7 @@
                     <x-input-label for="last_name" :value="__('Last Name')" class="text-sm font-medium" />
                     <div class="mt-1">
                         <x-text-input id="last_name"
-                            class="block w-full rounded-md shadow-sm border-gray-300 dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500"
+                            class="block w-full border-gray-300 rounded-md shadow-sm dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500"
                             type="text" name="last_name" :value="old('last_name')" required />
                     </div>
                     <x-input-error :messages="$errors->get('last_name')" class="mt-2" />
@@ -37,7 +37,7 @@
                     <x-input-label for="email" :value="__('Email')" class="text-sm font-medium" />
                     <div class="mt-1">
                         <x-text-input id="email"
-                            class="block w-full rounded-md shadow-sm border-gray-300 dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500"
+                            class="block w-full border-gray-300 rounded-md shadow-sm dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500"
                             type="email" name="email" :value="old('email')" required autocomplete="username" />
                     </div>
                     <x-input-error :messages="$errors->get('email')" class="mt-2" />
@@ -48,21 +48,21 @@
                     <x-input-label for="phone_number" :value="__('Phone Number')" class="text-sm font-medium" />
                     <div class="mt-1">
                         <x-text-input id="phone_number"
-                            class="block w-full rounded-md shadow-sm border-gray-300 dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500"
+                            class="block w-full border-gray-300 rounded-md shadow-sm dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500"
                             type="tel" name="phone_number" :value="old('phone_number')" required
                             placeholder="+1 (555) 123-4567" />
                     </div>
                     <x-input-error :messages="$errors->get('phone_number')" class="mt-2" />
                 </div>
-
+{{--
                 <!-- City Selection with Search -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
                     <!-- Wilaya Selection -->
                     <div>
                         <x-input-label for="wilaya_id" :value="__('Wilaya')" class="text-sm font-medium" />
                         <div class="mt-1">
                             <select id="wilaya_id" name="wilaya_id"
-                                class="h-10 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
+                                class="w-full h-10 border-gray-300 rounded-md shadow-sm dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600">
                                 <option value="">{{ __('Select Wilaya') }}</option>
                                  @foreach ($wilayas as $wilaya)
                     <option value="{{ $wilaya->id }}">{{ $wilaya->name_fr }}</option>
@@ -77,7 +77,7 @@
                         <x-input-label for="daira_id" :value="__('Daira')" class="text-sm font-medium" />
                         <div class="mt-1">
                             <select id="daira_id" name="daira_id"
-                                class="h-10 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+                                class="w-full h-10 border-gray-300 rounded-md shadow-sm dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600"
                                 disabled>
                                 <option value="">{{ __('Select Daira') }}</option>
                             </select>
@@ -90,7 +90,7 @@
                         <x-input-label for="commune_id" :value="__('Commune')" class="text-sm font-medium" />
                         <div class="mt-1">
                             <select id="commune_id" name="commune_id"
-                                class="h-10 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+                                class="w-full h-10 border-gray-300 rounded-md shadow-sm dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600"
                                 disabled>
                                 <option value="">{{ __('Select Commune') }}</option>
                             </select>
@@ -99,12 +99,13 @@
                     </div>
                 </div>
 
+ --}}
                 <!-- Password -->
                 <div>
                     <x-input-label for="password" :value="__('Password')" class="text-sm font-medium" />
                     <div class="mt-1">
                         <x-text-input id="password"
-                            class="block w-full rounded-md shadow-sm border-gray-300 dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500"
+                            class="block w-full border-gray-300 rounded-md shadow-sm dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500"
                             type="password" name="password" required autocomplete="new-password" />
                     </div>
                     <x-input-error :messages="$errors->get('password')" class="mt-2" />
@@ -115,7 +116,7 @@
                     <x-input-label for="password_confirmation" :value="__('Confirm Password')" class="text-sm font-medium" />
                     <div class="mt-1">
                         <x-text-input id="password_confirmation"
-                            class="block w-full rounded-md shadow-sm border-gray-300 dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500"
+                            class="block w-full border-gray-300 rounded-md shadow-sm dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500"
                             type="password" name="password_confirmation" required autocomplete="new-password" />
                     </div>
                     <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
@@ -124,8 +125,8 @@
                 <div class="flex items-center justify-between mt-6">
                     <div class="flex items-center">
                         <input id="terms" name="terms" type="checkbox"
-                            class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
-                        <label for="terms" class="ml-2 block text-sm text-gray-900 dark:text-gray-300">
+                            class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                        <label for="terms" class="block ml-2 text-sm text-gray-900 dark:text-gray-300">
                             {{ __('I agree to the') }} <a href="#"
                                 class="text-indigo-600 hover:text-indigo-500">{{ __('Terms of Service') }}</a>
                         </label>
@@ -137,7 +138,7 @@
                         {{ __('Already have an account?') }}
                     </a>
                     <x-primary-button
-                        class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        class="inline-flex justify-center px-4 py-2 ml-3 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         {{ __('Create Account') }}
                     </x-primary-button>
                 </div>
