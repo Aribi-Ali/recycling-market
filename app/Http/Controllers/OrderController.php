@@ -20,6 +20,7 @@ class OrderController extends Controller
 
     public function index()
     {
+        
         $orders = $this->orderService->getUserOrders();
         return view('orders.index', compact('orders'));
     }
