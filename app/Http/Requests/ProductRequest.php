@@ -23,7 +23,6 @@ class ProductRequest extends FormRequest
     {
         return [
             "title" => "required|string|min:3|max:100",
-            "slug" => "nullable|string|min:3|max:100",
             "description" => "nullable|string|min:3|max:500",
             "is_free" => "nullable|boolean",
             "price" => "nullable|numeric|min:0",

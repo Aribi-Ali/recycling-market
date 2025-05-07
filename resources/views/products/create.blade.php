@@ -75,7 +75,6 @@
                                         <input type="checkbox"
                                                name="is_free"
                                                id="is_free"
-                                               value="1"
                                                x-model="isFree"
                                                class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
                                         <label for="is_free" class="block ml-2 text-sm text-gray-700">This product is free</label>
@@ -136,19 +135,6 @@
                                         @endforeach
                                     </select>
                                     @error('category_id')
-                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                    @enderror
-                                </div>
-
-                                <!-- Published At -->
-                                <div>
-                                    <label for="published_at" class="block mb-1 text-sm font-medium text-gray-700">Publication Date</label>
-                                    <input type="datetime-local"
-                                           name="published_at"
-                                           id="published_at"
-                                           value="{{ old('published_at', '') }}"
-                                           class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm @error('published_at') border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 @enderror">
-                                    @error('published_at')
                                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                     @enderror
                                 </div>
@@ -260,41 +246,18 @@
                 selectedFiles: [],
 
                 handleImageUpload(event) {
-                    const files = event.target.files;
+                    this.imagePreviewUrls = []; // Clear previews
 
-                    // Validate files (size, type, count)
-                    for (let i = 0; i < files.length; i++) {
-                        const file = files[i];
-
-                        // Check file type
-                        if (!file.type.match('image.*')) {
-                            alert('Only image files are allowed');
-                            continue;
+                    const files = Array.from(event.target.files);
+                    files.forEach(file => {
+                        if (file.type.startsWith('image/') && file.size <= 3 * 1024 * 1024) {
+                            const reader = new FileReader();
+                            reader.onload = e => {
+                                this.imagePreviewUrls.push(e.target.result);
+                            };
+                            reader.readAsDataURL(file);
                         }
-
-                        // Check file size (3MB max)
-                        if (file.size > 3 * 1024 * 1024) {
-                            alert('File size must be less than 3MB');
-                            continue;
-                        }
-
-                        // Max 5 files
-                        if (this.imagePreviewUrls.length >= 5) {
-                            alert('You can upload a maximum of 5 images');
-                            break;
-                        }
-
-                        // Create preview
-                        const reader = new FileReader();
-                        reader.onload = (e) => {
-                            this.imagePreviewUrls.push(e.target.result);
-                            this.selectedFiles.push(file);
-                        };
-                        reader.readAsDataURL(file);
-                    }
-
-                    // Reset file input to allow selecting the same file again
-                    event.target.value = '';
+                    });
                 },
 
                 removeImage(index) {
@@ -376,5 +339,5 @@
             }
         });
     </script>
-    
+
 </x-app-layout>

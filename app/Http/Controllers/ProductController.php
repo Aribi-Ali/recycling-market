@@ -17,15 +17,13 @@ class ProductController extends Controller
     public function __construct(ProductService $productService){
         $this->productService = $productService;
     }
- public function create(){
-        $categories =Category::all();
-        return view('products.create', compact('categories'));
-
-    // return view('products.create');
-    }
+     public function create(){
+            $categories =Category::all();
+            return view('products.create', compact('categories'));
+        }
     public function index(){
         $products = $this->productService->getPublicProducts();
-        
+
         return view('products.index', compact('products'));
     }
 
@@ -53,7 +51,9 @@ class ProductController extends Controller
     }
 
     public function store(ProductRequest $request){
-        $this->productService->createproduct(Auth::id(), $request);
+        $data = $request->all();
+        $data['is_free'] = $request->has('is_free') ? true : false;
+        $this->productService->createproduct(Auth::id(), $data);
         return redirect()->back()->with('success', 'Product created successfully!');
     }
 

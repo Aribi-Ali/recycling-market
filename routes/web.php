@@ -22,7 +22,7 @@ Route::group(
     ],
     function () { //...
 
-        Route::resource('posts', ProductController::class);
+        Route::resource('/posts', ProductController::class);
         Route::post('/ckeditor/upload', [CKEditorController::class, 'upload'])->name('ckeditor.upload');
         Route::get('/', function () {
             $posts = \App\Models\Post::latest()->paginate(10);
