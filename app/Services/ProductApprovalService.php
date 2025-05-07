@@ -12,8 +12,7 @@ class ProductApprovalService{
         return ProductResource::collection($products);
     }
 
-    public function approveProduct($productId){
-        $product = Product::findOrFail($productId);
+    public function approveProduct($product){
         $product->status = 'approved';
         $product->save();
 
@@ -22,8 +21,7 @@ class ProductApprovalService{
         $user->notify(new ProductApprovedNotification($product));
     }
 
-    public function rejectProduct($productId){
-        $product = Product::findOrFail($productId);
+    public function rejectProduct($product){
         $product->status = 'rejected';
         $product->save();
     }
