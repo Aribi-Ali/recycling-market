@@ -7,10 +7,10 @@
 
     <div class="w-full py-12">
         <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-            @if (!$products->isEmpty())
+            @if ($products->isEmpty())
                 <div class="flex flex-col items-center justify-center py-12 text-center">
                     <h3 class="mb-2 text-lg font-medium text-gray-900">📦 No products found</h3>
-                    <p class="max-w-md text-gray-500">There are no pending products at the moment.</p>
+                    <p class="max-w-md text-gray-500">There are no approved products at the moment.</p>
                 </div>
             @else
                 <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-sm">
@@ -25,7 +25,6 @@
                             <th class="px-4 py-3 text-left">Status</th>
                             <th class="px-4 py-3 text-left">Category</th>
                             <th class="px-4 py-3 text-left">Seller</th>
-                            <th class="px-4 py-3 text-left">Published At</th>
                         </tr>
                     </thead>
                     <tbody class="text-sm text-gray-800 divide-y divide-gray-100">
@@ -51,10 +50,8 @@
                                         {{ ucfirst($product->status) }}
                                     </span>
                                 </td>
-                                <td class="px-4 py-3">{{ $product->category->name ?? 'N/A' }}</td>
-                                <td class="px-4 py-3">{{ $product->seller->name ?? 'N/A' }}</td>
-                                <td class="px-4 py-3">
-                                    {{ $product->published_at ? $product->published_at->format('Y-m-d') : '-' }}</td>
+                                <td class="px-4 py-3">{{ $product->category->name }}</td>
+                                <td class="px-4 py-3">{{ $product->seller->last_name }} {{ $product->seller->first_name }}</td>
                             </tr>
                         @endforeach
                     </tbody>
