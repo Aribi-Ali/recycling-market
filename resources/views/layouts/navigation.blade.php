@@ -80,6 +80,9 @@
                         </svg>
                     </button>
 
+                    <!-- Notification Icon -->
+                    @include("components.alert")
+
                     @auth
                         <!-- Settings Dropdown -->
                         <div class="hidden sm:flex sm:items-center sm:ms-6">

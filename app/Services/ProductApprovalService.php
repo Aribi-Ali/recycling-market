@@ -17,7 +17,7 @@ class ProductApprovalService{
         $product->save();
 
         // Send notification
-        $user = $product->user;
+        $user = $product->seller;
         $user->notify(new ProductApprovedNotification($product));
     }
 
