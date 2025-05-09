@@ -20,6 +20,11 @@ class ProductApprovalController extends Controller
         return view('products.pending', compact('products'));
     }
 
+    public function getRejectedProducts(){
+        $products = $this->productApprovalService->getRejectedProducts();
+        return view('products.rejected', compact('products'));
+    }
+
     public function approve(Product $product)
     {
         $this->productApprovalService->approveProduct($product);

@@ -21,6 +21,11 @@ class ProductApprovalService{
         $user->notify(new ProductApprovedNotification($product));
     }
 
+    public function getRejectedProducts(){
+        $products = Product::where('status', 'rejected')->with(['seller', 'category', 'images'])->latest()->get();
+        return ProductResource::collection($products);
+    }
+
     public function rejectProduct($product){
         $product->status = 'rejected';
         $product->save();

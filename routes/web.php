@@ -72,6 +72,7 @@ Route::group(
                 // Product
                 Route::get("/products/approved", [ProductController::class, "adminIndex"])->name("admin.products.approved");
                 Route::get('/products/pending', [ProductApprovalController::class, 'index'])->name('admin.products.pending');
+                Route::get("/products/rejected", [ProductApprovalController::class, "getRejectedProducts"])->name("admin.products.rejected");
                 Route::put('/products/{product}/approve', [ProductApprovalController::class, 'approve'])->name('admin.products.approve');
                 Route::put('/products/{product}/reject', [ProductApprovalController::class, 'reject'])->name('admin.products.reject');
 
