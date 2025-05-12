@@ -54,8 +54,8 @@
                     </div>
                     <x-input-error :messages="$errors->get('phone_number')" class="mt-2" />
                 </div>
-{{--
-                <!-- City Selection with Search -->
+
+                <!-- Location Selection with Search -->
                 <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
                     <!-- Wilaya Selection -->
                     <div>
@@ -64,9 +64,12 @@
                             <select id="wilaya_id" name="wilaya_id"
                                 class="w-full h-10 border-gray-300 rounded-md shadow-sm dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600">
                                 <option value="">{{ __('Select Wilaya') }}</option>
-                                 @foreach ($wilayas as $wilaya)
-                    <option value="{{ $wilaya->id }}">{{ $wilaya->name_fr }}</option>
-                @endforeach
+                                @foreach ($wilayas as $wilaya)
+                                    <option value="{{ $wilaya->id }}"
+                                        {{ old('wilaya_id') == $wilaya->id ? 'selected' : '' }}>
+                                        {{ $wilaya->name }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
                         <x-input-error :messages="$errors->get('wilaya_id')" class="mt-2" />
@@ -75,31 +78,52 @@
                     <!-- Daira Selection -->
                     <div>
                         <x-input-label for="daira_id" :value="__('Daira')" class="text-sm font-medium" />
-                        <div class="mt-1">
+                        <div class="relative mt-1">
                             <select id="daira_id" name="daira_id"
                                 class="w-full h-10 border-gray-300 rounded-md shadow-sm dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600"
                                 disabled>
                                 <option value="">{{ __('Select Daira') }}</option>
                             </select>
+                            <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none"
+                                id="daira-loading" style="display: none;">
+                                <svg class="w-5 h-5 text-indigo-500 animate-spin" xmlns="http://www.w3.org/2000/svg"
+                                    fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10"
+                                        stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor"
+                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                    </path>
+                                </svg>
+                            </div>
                         </div>
                         <x-input-error :messages="$errors->get('daira_id')" class="mt-2" />
                     </div>
 
-                    <!-- Commune Selection -->
+                    <!-- City Selection -->
                     <div>
-                        <x-input-label for="commune_id" :value="__('Commune')" class="text-sm font-medium" />
-                        <div class="mt-1">
-                            <select id="commune_id" name="commune_id"
+                        <x-input-label for="city_id" :value="__('City')" class="text-sm font-medium" />
+                        <div class="relative mt-1">
+                            <select id="city_id" name="city_id"
                                 class="w-full h-10 border-gray-300 rounded-md shadow-sm dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600"
                                 disabled>
-                                <option value="">{{ __('Select Commune') }}</option>
+                                <option value="">{{ __('Select City') }}</option>
                             </select>
+                            <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none"
+                                id="city_loading" style="display: none;">
+                                <svg class="w-5 h-5 text-indigo-500 animate-spin" xmlns="http://www.w3.org/2000/svg"
+                                    fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10"
+                                        stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor"
+                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                    </path>
+                                </svg>
+                            </div>
                         </div>
-                        <x-input-error :messages="$errors->get('commune_id')" class="mt-2" />
+                        <x-input-error :messages="$errors->get('city_id')" class="mt-2" />
                     </div>
                 </div>
 
- --}}
                 <!-- Password -->
                 <div>
                     <x-input-label for="password" :value="__('Password')" class="text-sm font-medium" />
@@ -146,249 +170,181 @@
         </div>
     </div>
 
-    @push('scripts')
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const citySearch = document.getElementById('city_search');
-                const citySelect = document.getElementById('city');
-                const cityResults = document.getElementById('city_results');
+    <script>
+        // Get DOM elements
+const wilayaSelect = document.getElementById('wilaya_id');
+const dairaSelect = document.getElementById('daira_id');
+const citySelect = document.getElementById('city_id');
+const dairaLoading = document.getElementById('daira-loading');
+const cityLoading = document.getElementById('city_loading');
 
-                // Get all cities from the select element
-                const cities = Array.from(citySelect.options).slice(1).map(option => {
-                    return {
-                        value: option.value,
-                        text: option.text
-                    };
-                });
+// Set CSRF token for all AJAX requests
+const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-                // Function to display search results
-                function displayResults(results) {
-                    cityResults.innerHTML = '';
-                    cityResults.classList.remove('hidden');
+// Helper function to display loading state
+function setLoading(element, loadingElement, isLoading) {
+    if (isLoading) {
+        element.classList.add('opacity-75');
+        element.setAttribute('disabled', 'disabled');
+        if (loadingElement) loadingElement.style.display = 'flex';
+    } else {
+        element.classList.remove('opacity-75');
+        element.removeAttribute('disabled');
+        if (loadingElement) loadingElement.style.display = 'none';
+    }
+}
 
-                    if (results.length === 0) {
-                        const noResults = document.createElement('div');
-                        noResults.textContent = 'No cities found';
-                        noResults.className = 'px-4 py-2 text-sm text-gray-700 dark:text-gray-300';
-                        cityResults.appendChild(noResults);
-                        return;
-                    }
+// Helper function to populate select options
+function populateOptions(selectElement, data, textKey = 'name') {
+    // Clear all options except the first one
+    selectElement.querySelectorAll('option:not(:first-child)').forEach(option => option.remove());
 
-                    results.forEach(city => {
-                        const div = document.createElement('div');
-                        div.textContent = city.text;
-                        div.className =
-                            'px-4 py-2 text-sm hover:bg-indigo-100 dark:hover:bg-indigo-900 cursor-pointer';
-                        div.dataset.value = city.value;
+    // Add new options
+    data.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item.id;
+        option.textContent = item[textKey];
+        selectElement.appendChild(option);
+    });
+}
 
-                        div.addEventListener('click', function() {
-                            citySearch.value = city.text;
-                            citySelect.value = city.value;
-                            cityResults.classList.add('hidden');
-                        });
+// Load dairas when wilaya changes
+wilayaSelect.addEventListener('change', function() {
+    const wilayaId = this.value;
 
-                        cityResults.appendChild(div);
-                    });
-                }
+    // Reset dependent selects
+    dairaSelect.value = '';
+    citySelect.value = '';
+    citySelect.setAttribute('disabled', 'disabled');
 
-                // Search function
-                function searchCities(query) {
-                    if (!query) {
-                        cityResults.classList.add('hidden');
-                        return;
-                    }
+    if (!wilayaId) {
+        dairaSelect.setAttribute('disabled', 'disabled');
+        return;
+    }
 
-                    const results = cities.filter(city =>
-                        city.text.toLowerCase().includes(query.toLowerCase())
-                    );
+    // Fetch dairas for selected wilaya
+    setLoading(dairaSelect, dairaLoading, true);
 
-                    displayResults(results);
-                }
+    // Fix: Ensure proper URL format with leading slash
+    fetch(`/api/wilayas/${wilayaId}/dairas`, {
+        method: 'GET',
+        headers: {
+            'X-CSRF-TOKEN': csrfToken,
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Network response was not ok: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        populateOptions(dairaSelect, data);
+        dairaSelect.removeAttribute('disabled');
+    })
+    .catch(error => {
+        console.error('Error fetching dairas:', error);
+        showToast('Error loading dairas. Please try again.', 'error');
+    })
+    .finally(() => {
+        setLoading(dairaSelect, dairaLoading, false);
+    });
+});
 
-                // Event listeners
-                citySearch.addEventListener('focus', function() {
-                    if (citySearch.value) {
-                        searchCities(citySearch.value);
-                    }
-                });
+// Load cities when daira changes
+dairaSelect.addEventListener('change', function() {
+    const dairaId = this.value;
 
-                citySearch.addEventListener('input', function() {
-                    searchCities(this.value);
-                });
+    // Reset City select
+    citySelect.value = '';
 
-                // Close results when clicking outside
-                document.addEventListener('click', function(e) {
-                    if (!citySearch.contains(e.target) && !cityResults.contains(e.target)) {
-                        cityResults.classList.add('hidden');
-                    }
-                });
+    if (!dairaId) {
+        citySelect.setAttribute('disabled', 'disabled');
+        return;
+    }
 
-                // Handle keyboard navigation
-                citySearch.addEventListener('keydown', function(e) {
-                    if (e.key === 'Escape') {
-                        cityResults.classList.add('hidden');
-                    }
-                });
-            });
+    // Fetch cities for selected daira
+    setLoading(citySelect, cityLoading, true);
 
+    fetch(`/api/dairas/${dairaId}/cities`, {
+        method: 'GET',
+        headers: {
+            'X-CSRF-TOKEN': csrfToken,
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Network response was not ok: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        populateOptions(citySelect, data);
+        citySelect.removeAttribute('disabled');
+    })
+    .catch(error => {
+        console.error('Error fetching cities:', error);
+        showToast('Error loading cities. Please try again.', 'error');
+    })
+    .finally(() => {
+        setLoading(citySelect, cityLoading, false);
+    });
+});
 
+// Simple toast notification function
+function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `fixed top-4 right-4 px-4 py-2 rounded-md text-white text-sm font-medium shadow-lg z-50 ${
+        type === 'error' ? 'bg-red-500' : 'bg-green-500'
+    }`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
 
+    setTimeout(() => {
+        toast.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+        setTimeout(() => {
+            document.body.removeChild(toast);
+        }, 500);
+    }, 3000);
+}
 
+// If you need to preselect values (e.g., when editing a record)
+function initializeSelects() {
+    const preselectedWilaya = wilayaSelect.value;
+    const preselectedDaira = dairaSelect.dataset.preselected;
+    const preselectedCity = citySelect.dataset.preselected;
 
-            document.addEventListener('DOMContentLoaded', function() {
-                const wilayaSelect = document.getElementById('wilaya_id');
-                const dairaSelect = document.getElementById('daira_id');
-                const communeSelect = document.getElementById('commune_id');
+    if (preselectedWilaya) {
+        wilayaSelect.dispatchEvent(new Event('change'));
 
-                // Set CSRF token for all AJAX requests
-                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        if (preselectedDaira) {
+            // Wait for dairas to load before selecting
+            const checkDairas = setInterval(() => {
+                if (dairaSelect.options.length > 1) {
+                    clearInterval(checkDairas);
+                    dairaSelect.value = preselectedDaira;
+                    dairaSelect.dispatchEvent(new Event('change'));
 
-                // Helper function to display loading state
-                function setLoading(element, isLoading) {
-                    if (isLoading) {
-                        element.classList.add('opacity-75');
-                        element.setAttribute('disabled', 'disabled');
-                    } else {
-                        element.classList.remove('opacity-75');
-                        element.removeAttribute('disabled');
-                    }
-                }
-
-                // Helper function to populate select options
-                function populateOptions(selectElement, data, textKey = 'name') {
-                    // Clear all options except the first one
-                    selectElement.querySelectorAll('option:not(:first-child)').forEach(option => option.remove());
-
-                    // Add new options
-                    data.forEach(item => {
-                        const option = document.createElement('option');
-                        option.value = item.id;
-                        option.textContent = item[textKey];
-                        selectElement.appendChild(option);
-                    });
-                }
-
-                // Load dairas when wilaya changes
-                wilayaSelect.addEventListener('change', function() {
-                    const wilayaId = this.value;
-
-                    // Reset dependent selects
-                    dairaSelect.value = '';
-                    communeSelect.value = '';
-                    communeSelect.setAttribute('disabled', 'disabled');
-
-                    if (!wilayaId) {
-                        dairaSelect.setAttribute('disabled', 'disabled');
-                        return;
-                    }
-
-                    // Fetch dairas for selected wilaya
-                    setLoading(dairaSelect, true);
-
-                    fetch(`/api/wilayas/${wilayaId}/dairas`, {
-                            method: 'GET',
-                            headers: {
-                                'X-CSRF-TOKEN': csrfToken,
-                                'Accept': 'application/json'
+                    if (preselectedCity) {
+                        // Wait for cities to load before selecting
+                        const checkCities = setInterval(() => {
+                            if (citySelect.options.length > 1) {
+                                clearInterval(checkCities);
+                                citySelect.value = preselectedCity;
                             }
-                        })
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('Network response was not ok');
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            populateOptions(dairaSelect, data);
-                            dairaSelect.removeAttribute('disabled');
-                        })
-                        .catch(error => {
-                            console.error('Error fetching dairas:', error);
-                            // Show an error message to the user if needed
-                        })
-                        .finally(() => {
-                            setLoading(dairaSelect, false);
-                        });
-                });
-
-                // Load communes when daira changes
-                dairaSelect.addEventListener('change', function() {
-                    const dairaId = this.value;
-
-                    // Reset commune select
-                    communeSelect.value = '';
-
-                    if (!dairaId) {
-                        communeSelect.setAttribute('disabled', 'disabled');
-                        return;
-                    }
-
-                    // Fetch communes for selected daira
-                    setLoading(communeSelect, true);
-
-                    fetch(`/api/dairas/${dairaId}/communes`, {
-                            method: 'GET',
-                            headers: {
-                                'X-CSRF-TOKEN': csrfToken,
-                                'Accept': 'application/json'
-                            }
-                        })
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('Network response was not ok');
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            populateOptions(communeSelect, data);
-                            communeSelect.removeAttribute('disabled');
-                        })
-                        .catch(error => {
-                            console.error('Error fetching communes:', error);
-                            // Show an error message to the user if needed
-                        })
-                        .finally(() => {
-                            setLoading(communeSelect, false);
-                        });
-                });
-
-                // If you need to preselect values (e.g., when editing a record)
-                function initializeSelects() {
-                    const preselectedWilaya = wilayaSelect.value;
-                    const preselectedDaira = dairaSelect.dataset.preselected;
-                    const preselectedCommune = communeSelect.dataset.preselected;
-
-                    if (preselectedWilaya) {
-                        wilayaSelect.dispatchEvent(new Event('change'));
-
-                        if (preselectedDaira) {
-                            // Wait for dairas to load before selecting
-                            const checkDairas = setInterval(() => {
-                                if (dairaSelect.options.length > 1) {
-                                    clearInterval(checkDairas);
-                                    dairaSelect.value = preselectedDaira;
-                                    dairaSelect.dispatchEvent(new Event('change'));
-
-                                    if (preselectedCommune) {
-                                        // Wait for communes to load before selecting
-                                        const checkCommunes = setInterval(() => {
-                                            if (communeSelect.options.length > 1) {
-                                                clearInterval(checkCommunes);
-                                                communeSelect.value = preselectedCommune;
-                                            }
-                                        }, 100);
-                                    }
-                                }
-                            }, 100);
-                        }
+                        }, 100);
                     }
                 }
+            }, 100);
+        }
+    }
+}
 
-                // Initialize if needed (for edit forms)
-                if (wilayaSelect.value) {
-                    initializeSelects();
-                }
-            });
-        </script>
-    @endpush
+// Initialize the form on page load
+document.addEventListener('DOMContentLoaded', function() {
+    initializeSelects();
+});
+    </script>
 </x-guest-layout>

@@ -27,9 +27,9 @@ class LocationController extends Controller
      * @param  Daira  $daira
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getCommunesByDaira(Daira $daira)
+    public function getCitiesByDaira(Daira $daira)
     {
-        $communes = $daira->communes()->get(['id', 'name']);
+        $communes = $daira->cities()->get(['id', 'name']);
 
         return response()->json($communes);
     }

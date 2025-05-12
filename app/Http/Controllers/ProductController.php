@@ -14,27 +14,32 @@ class ProductController extends Controller
 {
     protected $productService;
 
-    public function __construct(ProductService $productService){
+    public function __construct(ProductService $productService)
+    {
         $this->productService = $productService;
     }
- public function create(){
-        $categories =Category::all();
+    public function create()
+    {
+        $categories = Category::all();
         return view('products.create', compact('categories'));
 
-    // return view('products.create');
+        // return view('products.create');
     }
-    public function index(){
+    public function index()
+    {
         $products = $this->productService->getPublicProducts();
-        
+
         return view('products.index', compact('products'));
     }
 
-    public function adminIndex(){
+    public function adminIndex()
+    {
         $products = $this->productService->getPublicProducts();
         return view('products.approved', compact('products'));
     }
 
-    public function search(Request $request){
+    public function search(Request $request)
+    {
         $filters = $request->only([
             'name',
             'is_free',
@@ -46,33 +51,39 @@ class ProductController extends Controller
         return view('products.index', compact('products'));
     }
 
-    public function sellerProducts(){
+    public function sellerProducts()
+    {
         $sellerId = Auth::id();
         $products = $this->productService->getSellerproducts($sellerId);
         return view('products.index', compact('products'));
     }
 
-    public function store(ProductRequest $request){
+    public function store(ProductRequest $request)
+    {
         $this->productService->createproduct(Auth::id(), $request);
         return redirect()->back()->with('success', 'Product created successfully!');
     }
 
-    public function show(Product $productId){
+    public function show(Product $productId)
+    {
         $product = $this->productService->getproductById($productId);
         return view('products.show', compact('product'));
     }
 
-    public function update(ProductRequest $request, Product $productId){
+    public function update(ProductRequest $request, Product $productId)
+    {
         $this->productService->updateproduct($productId, Auth::id(), $request);
         return redirect()->back()->with('success', 'Product updated successfully!');
     }
 
-    public function delete(Product $productId){
+    public function delete(Product $productId)
+    {
         $this->productService->deleteproduct($productId);
         return redirect()->back()->with('success', 'Product deleted successfully!');
     }
 
-    public function uploadImage(Product $productId, Request $request){
+    public function uploadImage(Product $productId, Request $request)
+    {
         $request->validate([
             'image' => 'required|image|max:2048',
         ]);
@@ -80,7 +91,8 @@ class ProductController extends Controller
         return redirect()->back()->with('success', 'Image uploaded successfully!');
     }
 
-    public function deleteImage($imageId){
+    public function deleteImage($imageId)
+    {
         $this->productService->deleteImage($imageId);
     }
 }

@@ -89,3 +89,8 @@ Route::group(
         require __DIR__ . '/auth.php';
     }
 );
+
+
+
+Route::get('/api/wilayas/{wilaya}/dairas', [LocationController::class, 'getDairasByWilaya']);
+Route::get('/api/dairas/{daira}/cities', [LocationController::class, 'getCitiesByDaira']);

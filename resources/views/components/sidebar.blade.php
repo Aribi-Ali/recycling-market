@@ -17,10 +17,14 @@
                     class="flex items-center w-full px-6 py-3 transition-colors duration-200 {{ request()->routeIs('admin.products.pending') ? 'bg-indigo-50 text-indigo-600 border-r-4 border-indigo-600' : 'text-gray-600 hover:bg-gray-50' }}">
                     {{ __('Pending Products') }}
                 </a>
+
+                @if (auth()->user()->role == "admin")
+
                 <a href="{{ route('admin.categories.index') }}"
-                    class="flex items-center w-full px-6 py-3 transition-colors duration-200 {{ request()->routeIs('admin.categories.index') ? 'bg-indigo-50 text-indigo-600 border-r-4 border-indigo-600' : 'text-gray-600 hover:bg-gray-50' }}">
-                    {{ __('Categories') }}
-                </a>
+                class="flex items-center w-full px-6 py-3 transition-colors duration-200 {{ request()->routeIs('admin.categories.index') ? 'bg-indigo-50 text-indigo-600 border-r-4 border-indigo-600' : 'text-gray-600 hover:bg-gray-50' }}">
+                {{ __('Categories') }}
+            </a>
+            @endif
             </li>
         </ul>
     </nav>
