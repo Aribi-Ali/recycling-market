@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->text('description');
             $table->boolean('is_free');
-            $table->integer('price');
+            $table->float('price');
             $table->enum("condition", ["new", "used"]);
             $table->enum("status", ["approved", "pending", "rejected"])->default("pending");
 

@@ -53,7 +53,6 @@ class ProductService
             // 1. Create the product
             $product = Product::create([
                 'title' => $data['title'],
-                'slug' => $data['slug'],
                 'description' => $data['description'],
                 'is_free' => $data['is_free'],
                 'price' => $data['price'],

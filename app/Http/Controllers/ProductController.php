@@ -18,6 +18,7 @@ class ProductController extends Controller
     {
         $this->productService = $productService;
     }
+<<<<<<< HEAD
     public function create()
     {
         $categories = Category::all();
@@ -27,6 +28,13 @@ class ProductController extends Controller
     }
     public function index()
     {
+=======
+     public function create(){
+            $categories =Category::all();
+            return view('products.create', compact('categories'));
+        }
+    public function index(){
+>>>>>>> 4c6962924be8d24345ae6c079dbc8a21f034ff08
         $products = $this->productService->getPublicProducts();
 
         return view('products.index', compact('products'));
@@ -58,9 +66,16 @@ class ProductController extends Controller
         return view('products.index', compact('products'));
     }
 
+<<<<<<< HEAD
     public function store(ProductRequest $request)
     {
         $this->productService->createproduct(Auth::id(), $request);
+=======
+    public function store(ProductRequest $request){
+        $data = $request->all();
+        $data['is_free'] = $request->has('is_free') ? true : false;
+        $this->productService->createproduct(Auth::id(), $data);
+>>>>>>> 4c6962924be8d24345ae6c079dbc8a21f034ff08
         return redirect()->back()->with('success', 'Product created successfully!');
     }
 

@@ -12,18 +12,21 @@ class ProductApprovalService{
         return ProductResource::collection($products);
     }
 
-    public function approveProduct($productId){
-        $product = Product::findOrFail($productId);
+    public function approveProduct($product){
         $product->status = 'approved';
         $product->save();
 
         // Send notification
-        $user = $product->user;
+        $user = $product->seller;
         $user->notify(new ProductApprovedNotification($product));
     }
 
-    public function rejectProduct($productId){
-        $product = Product::findOrFail($productId);
+    public function getRejectedProducts(){
+        $products = Product::where('status', 'rejected')->with(['seller', 'category', 'images'])->latest()->get();
+        return ProductResource::collection($products);
+    }
+
+    public function rejectProduct($product){
         $product->status = 'rejected';
         $product->save();
     }

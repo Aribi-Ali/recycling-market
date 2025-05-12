@@ -22,7 +22,7 @@ Route::group(
     ],
     function () { //...
 
-        Route::resource('posts', ProductController::class);
+        Route::resource('/posts', ProductController::class);
         Route::post('/ckeditor/upload', [CKEditorController::class, 'upload'])->name('ckeditor.upload');
         Route::get('/', function () {
             $posts = \App\Models\Post::latest()->paginate(10);
@@ -72,8 +72,9 @@ Route::group(
                 // Product
                 Route::get("/products/approved", [ProductController::class, "adminIndex"])->name("admin.products.approved");
                 Route::get('/products/pending', [ProductApprovalController::class, 'index'])->name('admin.products.pending');
-                Route::put('/products/{id}/approve', [ProductApprovalController::class, 'approve'])->name('admin.products.approve');
-                Route::put('/products/{id}/reject', [ProductApprovalController::class, 'reject'])->name('admin.products.reject');
+                Route::get("/products/rejected", [ProductApprovalController::class, "getRejectedProducts"])->name("admin.products.rejected");
+                Route::put('/products/{product}/approve', [ProductApprovalController::class, 'approve'])->name('admin.products.approve');
+                Route::put('/products/{product}/reject', [ProductApprovalController::class, 'reject'])->name('admin.products.reject');
 
                 // Category
                 Route::get("/categories", [CategoryController::class, 'index'])->name('admin.categories.index');

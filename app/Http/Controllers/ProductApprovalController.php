@@ -15,11 +15,14 @@ class ProductApprovalController extends Controller
         $this->productApprovalService = $productApprovalService;
     }
 
-    public function index()
-    {
+    public function index(){
         $products = $this->productApprovalService->getPendingProducts();
-        
-        return view('products.approved', compact('products'));
+        return view('products.pending', compact('products'));
+    }
+
+    public function getRejectedProducts(){
+        $products = $this->productApprovalService->getRejectedProducts();
+        return view('products.rejected', compact('products'));
     }
 
     public function approve(Product $product)
