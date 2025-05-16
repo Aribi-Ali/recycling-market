@@ -1,7 +1,7 @@
 <x-app-layout>
-    @if(session('success'))
+    @if (session('success'))
         @include('components.notification', [
-            'message' => session(('success'))
+            'message' => session('success'),
         ])
     @endif
     <x-slot name="header">
@@ -35,7 +35,12 @@
                     <tbody class="text-sm text-gray-800 divide-y divide-gray-100">
                         @foreach ($products as $product)
                             <tr>
-                                <td class="px-4 py-3">{{ $product->title }}</td>
+                                <td class="px-4 py-3">
+                                    <a href="{{ route('products.show', $product->id) }}">
+
+                                        {{ $product->title }}
+                                </td>
+                                </a>
                                 <td class="max-w-xs px-4 py-3 line-clamp-2">{{ $product->description }}</td>
                                 <td class="px-4 py-3">
                                     <span
@@ -55,15 +60,15 @@
                                     </span>
                                 </td>
                                 <td class="px-4 py-3">{{ $product->category->name }}</td>
-                                <td class="px-4 py-3">{{ $product->seller->last_name }} {{ $product->seller->first_name }}</td>
+                                <td class="px-4 py-3">{{ $product->seller->last_name }}
+                                    {{ $product->seller->first_name }}</td>
                                 <td class="px-4 py-3">
-                                    <form action="{{ route('admin.products.approve', $product->id) }}" method="POST" class="flex gap-4">
+                                    <form action="{{ route('admin.products.approve', $product->id) }}" method="POST"
+                                        class="flex gap-4">
                                         @csrf
                                         @method('PUT')
-                                        <Button
-                                            type="submit"
-                                            class="flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                                        >
+                                        <Button type="submit"
+                                            class="flex items-center px-4 py-2 text-white bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed">
                                             Approve
                                         </Button>
                                     </form>

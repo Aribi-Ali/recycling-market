@@ -18,26 +18,16 @@ class ProductController extends Controller
     {
         $this->productService = $productService;
     }
-<<<<<<< HEAD
     public function create()
     {
         $categories = Category::all();
         return view('products.create', compact('categories'));
-
-        // return view('products.create');
     }
     public function index()
     {
-=======
-     public function create(){
-            $categories =Category::all();
-            return view('products.create', compact('categories'));
-        }
-    public function index(){
->>>>>>> 4c6962924be8d24345ae6c079dbc8a21f034ff08
         $products = $this->productService->getPublicProducts();
-
-        return view('products.index', compact('products'));
+        // return $products;
+        return view('products.list', compact('products'));
     }
 
     public function adminIndex()
@@ -66,25 +56,31 @@ class ProductController extends Controller
         return view('products.index', compact('products'));
     }
 
-<<<<<<< HEAD
     public function store(ProductRequest $request)
     {
-        $this->productService->createproduct(Auth::id(), $request);
-=======
-    public function store(ProductRequest $request){
         $data = $request->all();
         $data['is_free'] = $request->has('is_free') ? true : false;
         $this->productService->createproduct(Auth::id(), $data);
->>>>>>> 4c6962924be8d24345ae6c079dbc8a21f034ff08
         return redirect()->back()->with('success', 'Product created successfully!');
     }
 
-    public function show(Product $productId)
+    public function show(Product $product)
     {
-        $product = $this->productService->getproductById($productId);
+        // $product = $this->productService->getproductById($productId);
+
+        $product->load(["category", "images"]);
+        // return $product;
         return view('products.show', compact('product'));
     }
 
+    public function checkOut(Product $product)
+    {
+        // $product = $this->productService->getproductById($productId);
+
+        $product->load(["category", "images"]);
+        // return $product;
+        return view('products.checkout', compact('product'));
+    }
     public function update(ProductRequest $request, Product $productId)
     {
         $this->productService->updateproduct($productId, Auth::id(), $request);

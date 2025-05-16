@@ -12,21 +12,23 @@ class OrderService
 
     public function getUserOrders()
     {
-        $orders = Auth::user()->orders()->latest()->with("product", "address")->get();
+        $orders = Auth::user()->orders()->latest()->with("product")->get();
         return OrderResource::collection($orders);
     }
 
     public function getAllOrders()
     {
-        $orders = Order::latest()->with(['user', 'product', 'address'])->get();
+        $orders = Order::latest()->with(['user', 'product',])->get();
         return OrderResource::collection($orders);
     }
 
     public function create($data)
     {
+        // dd($data->location);
         Auth::user()->orders()->create([
             'product_id' => $data['product_id'],
-            'address_id' => $data['address_id'],
+            'location' => $data->location,
+            // 'address_id' => $data['address_id'],
             'status' => 'pending'
         ]);
     }

@@ -6,6 +6,7 @@ use App\Http\Controllers\CKEditorController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProductApprovalController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
@@ -22,7 +23,7 @@ Route::group(
     ],
     function () { //...
 
-        Route::resource('/posts', ProductController::class);
+        Route::resource('/posts', PostController::class);
         Route::post('/ckeditor/upload', [CKEditorController::class, 'upload'])->name('ckeditor.upload');
         Route::get('/', function () {
             $posts = \App\Models\Post::latest()->paginate(10);
@@ -38,7 +39,8 @@ Route::group(
         Route::get("/products", [ProductController::class, "index"])->name("products.index");
         // Route::post("/products", [ProductController::class, "store"])->name("products.store");
         Route::get("/products/search", [ProductController::class, "search"])->name("products.search");
-        Route::get("/products/{productId}", [ProductController::class, "show"])->name("products.show");
+        Route::get("/products/{product}", [ProductController::class, "show"])->name("products.show");
+        Route::get("/products/order/{product}", [ProductController::class, "checkOut"])->name("products.checkout");
 
 
         Route::middleware('auth')->group(function () {

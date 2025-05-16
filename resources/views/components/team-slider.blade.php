@@ -2,10 +2,10 @@
     <div class="container">
         <div class="mb-12 text-center">
             <h2 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-                Meet Our Team
+                Bloging
             </h2>
             <p class="mx-auto mt-4 max-w-[700px] text-muted-foreground md:text-xl">
-                The experts behind our weather intelligence platform
+                Read latest articles and news from our blog. Stay updated with the latest trends and insights in the industry.
             </p>
         </div>
 

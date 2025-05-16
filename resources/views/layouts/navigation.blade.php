@@ -5,27 +5,36 @@
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center">
                     <!-- Logo -->
-                    <a href="{{ route('dashboard') }}" class="flex items-center">
+                    <a href="{{ route('home') }}" class="flex items-center">
                         <x-application-logo class="block w-auto text-white fill-current h-9" />
+                       <h1 class="font-extrabold">جمع الملابس</h1>
+
+
                     </a>
 
                     <!-- Navigation Links -->
                     <div class="hidden sm:flex sm:space-x-6 sm:ms-10">
 
 
-
+                        <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.index')" class="text-white hover:text-blue-200">
+                            {{ __('Products') }}
+                        </x-nav-link>
 
                         @auth
                             <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-white hover:text-blue-200">
                                 {{ __('Dashboard') }}
                             </x-nav-link>
-                            @can('clients')
-                                <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-white hover:text-blue-200">
+                            @can('client')
+                                {{-- <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-white hover:text-blue-200">
                                     {{ __('Requests') }}
+                                </x-nav-link> --}}
+
+                                <x-nav-link :href="route('orders.index')" :active="request()->routeIs('orders.index')" class="text-white hover:text-blue-200">
+                                    {{ __('My Orders') }}
                                 </x-nav-link>
                             @endcan
                             @can('admin')
-                                <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-white hover:text-blue-200">
+                                <x-nav-link :href="route('admin.orders.index')" :active="request()->routeIs('admin.orders.index')" class="text-white hover:text-blue-200">
                                     {{ __('Orders') }}
                                 </x-nav-link>
                             @endcan
@@ -39,6 +48,9 @@
                         <div class="hidden sm:flex sm:items-center">
                             <x-nav-link :href="route('login')" :active="request()->routeIs('login')" class="text-white hover:text-blue-200">
                                 {{ __('Login') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('register')" :active="request()->routeIs('register')" class="text-white hover:text-blue-200">
+                                {{ __('Register') }}
                             </x-nav-link>
                         </div>
                     @endguest
@@ -81,7 +93,7 @@
                     </button>
 
                     <!-- Notification Icon -->
-                    @include("components.alert")
+                    @include('components.alert')
 
                     @auth
                         <!-- Settings Dropdown -->
@@ -96,7 +108,8 @@
                                         <svg class="w-4 h-4 ml-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                                             fill="currentColor">
                                             <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414
-                                                1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                                1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                clip-rule="evenodd" />
                                         </svg>
                                     </button>
                                 </x-slot>

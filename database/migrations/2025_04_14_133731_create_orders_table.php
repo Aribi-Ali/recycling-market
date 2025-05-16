@@ -20,10 +20,10 @@ return new class extends Migration
             $table->unsignedBigInteger('product_id')->nullable();
             $table->foreign('product_id')->references('id')->on('products')->nullOnDelete();
 
-            $table->unsignedBigInteger('address_id')->nullable();
-            $table->foreign('address_id')->references('id')->on('addresses')->nullOnDelete();
+            // $table->unsignedBigInteger('address_id')->nullable();
+            // $table->foreign('address_id')->references('id')->on('addresses')->nullOnDelete();
 
-
+            $table->string("location")->nullable();
             $table->enum('status', ['pending', 'confirmed', 'delivered', 'shipped', 'cancelled'])->default('pending');
             $table->timestamps();
         });

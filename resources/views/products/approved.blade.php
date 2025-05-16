@@ -30,7 +30,12 @@
                     <tbody class="text-sm text-gray-800 divide-y divide-gray-100">
                         @foreach ($products as $product)
                             <tr>
-                                <td class="px-4 py-3">{{ $product->title }}</td>
+
+                                <td class="px-4 py-3">
+                                    <a href="{{ route('products.show', $product->id) }}">
+                                        {{ $product->title }}
+                                    </a>
+                                </td>
                                 <td class="px-4 py-3">{{ $product->slug }}</td>
                                 <td class="max-w-xs px-4 py-3 line-clamp-2">{{ $product->description }}</td>
                                 <td class="px-4 py-3">
@@ -51,7 +56,8 @@
                                     </span>
                                 </td>
                                 <td class="px-4 py-3">{{ $product->category->name }}</td>
-                                <td class="px-4 py-3">{{ $product->seller->last_name }} {{ $product->seller->first_name }}</td>
+                                <td class="px-4 py-3">{{ $product->seller->last_name }}
+                                    {{ $product->seller->first_name }}</td>
                             </tr>
                         @endforeach
                     </tbody>

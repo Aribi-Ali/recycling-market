@@ -16,7 +16,7 @@ class OrderResource extends JsonResource
     {
         return [
             "product" => new ProductResource($this->whenLoaded('product')),
-            "address" => new AddressResource($this->whenLoaded('address')),
+            // "address" => new AddressResource($this->whenLoaded('address')),
             "user" => new UserResource($this->whenLoaded('user')),
             "status" => $this->status
         ];

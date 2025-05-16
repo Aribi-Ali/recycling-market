@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Product;
 use App\Models\ProductImage;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -57,7 +58,7 @@ class ProductService
                 'is_free' => $data['is_free'],
                 'price' => $data['price'],
                 'condition' => $data['condition'],
-                'status' => 'pending',
+                'status' => Auth()->user()->role == "admin" ? "approved" : 'pending',
                 'category_id' => $data['category_id'],
                 'seller_id' => $sellerId,
             ]);
